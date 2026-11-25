@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>ソウル ふたり旅 2027春</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Black+Han+Sans&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* Layout: 旅行ガイドブック。全幅写真の表紙 → 検索バー（固定）→ カテゴリ別の写真カード。丹青（タンチョン）色をアクセントに */
+:root{
+  --paper:#F7F5F0; --card:#FFFFFF; --ink:#17191F; --muted:#5C6070;
+  --jade:#16705E; --red:#D8402A; --gold:#E9A321; --night:#141A33; --line:#E2DED4; --soft:#EFEBE2;
+  --display:"Dela Gothic One","Zen Kaku Gothic New",system-ui,sans-serif;
+  --hangul:"Black Han Sans","Apple SD Gothic Neo",sans-serif;
+  --body:"Zen Kaku Gothic New","Hiragino Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#101320;--card:#1A1E2E;--ink:#EEF0F5;--muted:#A3A8BA;--jade:#3FB79B;--red:#F06A50;--gold:#F2B744;--night:#0A0D1A;--line:#2A2F44;--soft:#222739;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#101320;--card:#1A1E2E;--ink:#EEF0F5;--muted:#A3A8BA;--jade:#3FB79B;--red:#F06A50;--gold:#F2B744;--night:#0A0D1A;--line:#2A2F44;--soft:#222739;color-scheme:dark}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.75}
+*{box-sizing:border-box}
+img{display:block;max-width:100%}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance;margin:0}
+rt{font-size:.5em;font-family:var(--body);font-weight:500;letter-spacing:.02em;color:var(--muted)}
+.hero rt,.band rt,.spot rt{color:rgba(255,255,255,.85)}
+mark{background:var(--gold);color:#17191F;border-radius:3px;padding:0 2px}
+
+/* hero */
+.hero{position:relative;color:#fff;background:var(--night);overflow:hidden}
+.hero > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.72}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,13,26,.15) 0%,rgba(10,13,26,.25) 45%,rgba(10,13,26,.92) 100%)}
+.hero .wrap{position:relative;z-index:1;padding-block:clamp(64px,12vw,140px) 40px;display:grid;gap:18px}
+.kicker{font-size:13px;letter-spacing:.2em;font-weight:700;color:var(--gold)}
+.hero h1{font-family:var(--display);font-weight:400;font-size:clamp(56px,13vw,150px);line-height:.95}
+.hero h1 .ko{display:block;font-family:var(--hangul);font-size:.42em;color:var(--gold);letter-spacing:.06em;margin-top:.25em}
+.hero p.lead{font-size:clamp(17px,2.2vw,22px);max-width:34em;margin:0;font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{border:1px solid rgba(255,255,255,.45);border-radius:999px;padding:6px 14px;font-size:14px;background:rgba(255,255,255,.08)}
+.chip b{color:var(--gold);font-weight:700;margin-right:6px}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.toc a{color:#fff;text-decoration:none;font-size:14px;font-weight:700;border-bottom:2px solid var(--gold);padding-bottom:2px;margin-right:12px}
+.stripe{height:10px;background:repeating-linear-gradient(90deg,var(--jade) 0 40px,var(--red) 40px 56px,var(--gold) 56px 64px,var(--night) 64px 72px)}
+
+/* search bar */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+.searchbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.searchbar .wrap{padding-block:12px;display:grid;gap:10px}
+.sb-row{display:flex;gap:10px;align-items:center}
+.sb-row label{flex:1;min-width:0;position:relative}
+#q{width:100%;font:inherit;font-size:16px;padding:12px 16px 12px 44px;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--ink)}
+#q:focus{outline:none;border-color:var(--jade)}
+.sb-row label::before{content:"검색";position:absolute;left:12px;top:50%;transform:translateY(-50%);font-family:var(--hangul);font-size:13px;color:var(--red)}
+#count{font-size:13px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.filters{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.filters button{flex:none;font:inherit;font-size:14px;font-weight:700;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--jade);border-color:var(--jade);color:#fff}
+.filters button:focus-visible,#q:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.quick{display:flex;gap:6px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.quick button{font:inherit;font-size:13px;background:none;border:none;color:var(--jade);cursor:pointer;padding:0 4px;text-decoration:underline;text-underline-offset:3px}
+
+/* sections */
+section{padding-block:56px 8px}
+.sec-head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.sec-head h2{font-family:var(--display);font-weight:400;font-size:clamp(30px,5vw,46px);line-height:1.1}
+.sec-head .ko{font-family:var(--hangul);color:var(--red);font-size:clamp(20px,3vw,28px)}
+.sec-head p{flex-basis:100%;margin:4px 0 0;color:var(--muted);max-width:42em}
+.sec-head .n{font-size:14px;color:var(--muted)}
+.empty{padding:40px;text-align:center;color:var(--muted);border:2px dashed var(--line);border-radius:16px}
+
+/* spot cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.ph{position:relative;aspect-ratio:16/10;background:var(--night);overflow:hidden}
+.ph img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.item:hover .ph img{transform:scale(1.04)}
+.ph .area{position:absolute;left:12px;top:12px;background:rgba(10,13,26,.72);color:#fff;font-size:12px;font-weight:700;letter-spacing:.08em;padding:3px 10px;border-radius:999px}
+.ph .star{position:absolute;right:12px;top:12px;background:var(--red);color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px}
+.ph.noimg{display:grid;place-items:center;background:var(--jade)}
+.ph.noimg span{font-family:var(--hangul);color:#fff;font-size:44px;opacity:.9}
+.bd{padding:16px 18px 18px;display:grid;gap:8px;align-content:start}
+.bd h3{font-size:21px;font-weight:700;line-height:1.5}
+.bd .ko2{font-family:var(--hangul);color:var(--red);font-size:14px;margin-left:6px;font-weight:400}
+.bd p{margin:0;font-size:14.5px;line-height:1.7}
+.facts{display:grid;grid-template-columns:5.2em 1fr;gap:3px 10px;font-size:13px;margin:4px 0 0;padding:10px 12px;background:var(--soft);border-radius:10px}
+.facts dt{color:var(--muted);font-weight:700}
+.facts dd{margin:0;min-width:0}
+.tip{font-size:13px;border-left:3px solid var(--gold);padding-left:10px;color:var(--ink);border-radius:0}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tags span{font-size:12px;color:var(--jade);background:transparent;border:1px solid var(--jade);border-radius:999px;padding:1px 8px}
+
+/* food grid (smaller) */
+.grid.food{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.grid.food .ph{aspect-ratio:4/3}
+.price{font-variant-numeric:tabular-nums;color:var(--jade);font-weight:700;font-size:14px}
+
+/* info cards */
+.grid.info{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.info .item{padding:0}
+.info ul{margin:0;padding-left:1.1em;font-size:14px;line-height:1.7}
+.info li+li{margin-top:2px}
+
+/* phrases */
+.phr{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.ph-row{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:2px}
+.ph-row .ja{font-size:13px;color:var(--muted)}
+.ph-row .kr{font-family:var(--hangul);font-size:20px;color:var(--ink);letter-spacing:.02em}
+.ph-row .yo{font-size:15px;font-weight:700;color:var(--red)}
+
+/* band */
+.band{position:relative;color:#fff;margin-top:56px;overflow:hidden;background:var(--night)}
+.band > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
+.band .wrap{position:relative;padding-block:88px}
+.band blockquote{margin:0;font-family:var(--display);font-size:clamp(26px,4.4vw,46px);line-height:1.4;max-width:16em}
+.band small{display:block;margin-top:14px;font-size:15px;opacity:.88;font-family:var(--body)}
+
+/* itinerary */
+.days{display:grid;gap:14px}
+.day{display:grid;grid-template-columns:100px 1fr 200px;gap:20px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+.day .n{font-family:var(--display);font-size:28px;color:var(--jade);text-align:center;line-height:1}
+.day .n small{display:block;font-family:var(--body);font-size:12px;color:var(--muted);margin-top:6px;letter-spacing:.1em}
+.day h3{font-size:18px;font-weight:700}
+.day ol{margin:4px 0 0;padding-left:1.2em;color:var(--muted);font-size:14px;line-height:1.7}
+.day img{width:200px;height:120px;object-fit:cover;border-radius:10px}
+.day > div{min-width:0}
+
+/* map + budget */
+.two{display:grid;grid-template-columns:1.1fr .9fr;gap:24px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;min-width:0}
+.panel h3{font-size:18px;font-weight:700;margin-bottom:12px}
+.map svg{width:100%;height:auto}
+.map text{font-family:var(--body);fill:var(--ink);font-size:13px;font-weight:700}
+.map text.r{font-size:10px;font-weight:500;fill:var(--muted)}
+.map .river{stroke:var(--jade);stroke-opacity:.25}
+.map .pin{fill:var(--red)}.map .pin2{fill:var(--muted)}
+.total{font-family:var(--display);font-size:clamp(34px,5vw,48px);color:var(--red);line-height:1.1;font-variant-numeric:tabular-nums}
+.total small{font-family:var(--body);font-size:15px;color:var(--muted);margin-left:8px}
+.bars{display:grid;gap:12px;margin-top:18px}
+.bar{display:grid;grid-template-columns:7.5em 1fr 6.5em;gap:10px;align-items:center;font-size:14px}
+.bar .t{height:12px;border-radius:6px;background:var(--line);overflow:hidden}
+.bar .t i{display:block;height:100%;border-radius:6px;background:var(--jade)}
+.bar:first-child .t i{background:var(--red)}
+.bar .v{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.note{font-size:13px;color:var(--muted);margin-top:14px;line-height:1.6}
+
+/* checklist */
+.check{columns:3 240px;gap:24px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 24px}
+.check label{display:flex;gap:8px;align-items:flex-start;break-inside:avoid;font-size:14px;padding:4px 0;cursor:pointer}
+.check input{accent-color:var(--jade);margin-top:5px}
+
+footer{margin-top:72px;padding-block:32px 48px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;line-height:1.7}
+footer h4{margin:0 0 6px;font-size:13px;color:var(--ink)}
+
+@media (max-width:820px){
+  .two{grid-template-columns:1fr}
+  .day{grid-template-columns:64px 1fr}.day img{display:none}
+  .grid,.grid.info{grid-template-columns:1fr}
+  .grid.food{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  .grid.food .bd h3{font-size:17px}
+}
+@media (prefers-reduced-motion:reduce){.ph img{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <img src="img/hero.jpg" alt="ソウルの夜景">
+  <div class="wrap">
+    <div class="kicker">SAPPORO → SEOUL · SPRING 2027</div>
+    <h1>SEOUL<span class="ko">서울, 둘이서</span></h1>
+    <p class="lead">ふたりで、ソウル5泊6日。<br>王宮で韓服、市場で食べ歩き、夜は南山タワー。</p>
+    <div class="chips">
+      <span class="chip"><b>飛行機</b>新千歳 → 仁川 直行 約3時間半</span>
+      <span class="chip"><b>時期</b>3月の春休み</span>
+      <span class="chip"><b>人数</b>2人・キャリー2個</span>
+      <span class="chip"><b>予算</b>2人で約25〜30万円</span>
+    </div>
+    <nav class="toc" aria-label="目次"><a href="#spots">観光</a><a href="#food">グルメ</a><a href="#shop">買い物</a><a href="#info">実用情報</a><a href="#phrase">韓国語</a><a href="#plan">モデルプラン</a><a href="#money">地図と予算</a><a href="#list">持ち物</a></nav>
+  </div>
+</header>
+<div class="stripe" aria-hidden="true"></div>
+
+<div class="searchbar">
+  <div class="wrap">
+    <div class="sb-row">
+      <label for="q"><input id="q" type="search" placeholder="例：夜景、雨の日、駅、両替、トイレ、ホンデ…" autocomplete="off"></label>
+      <span id="count"></span>
+    </div>
+    <div class="filters" role="group" aria-label="カテゴリ">
+      <button type="button" data-cat="all" aria-pressed="true">すべて</button>
+      <button type="button" data-cat="spot" aria-pressed="false">観光</button>
+      <button type="button" data-cat="food" aria-pressed="false">グルメ</button>
+      <button type="button" data-cat="shop" aria-pressed="false">買い物</button>
+      <button type="button" data-cat="info" aria-pressed="false">実用情報</button>
+      <button type="button" data-cat="phrase" aria-pressed="false">韓国語</button>
+    </div>
+    <div class="quick">よく調べる：<button>夜景</button><button>雨の日</button><button>無料</button><button>カップル</button><button>空港</button><button>お金</button><button>お土産</button><button>朝ごはん</button></div>
+  </div>
+</div>
+
+<main>
+<section class="wrap" id="spots" data-sec="spot">
+  <div class="sec-head"><h2>観光スポット</h2><span class="ko">명소</span><span class="n" data-n="spot"></span><p>最寄り駅・所要時間・料金つき。料金と時間は2026年11月時点の目安なので、行く前に公式情報で確認してください。</p></div>
+  <div class="grid" id="g-spot"></div>
+</section>
+
+<div class="band">
+  <img src="img/hangang.jpg" alt="汝矣島の漢江公園" loading="lazy">
+  <div class="wrap"><blockquote>夜の<ruby>漢江<rt>ハンガン</rt></ruby>で、<br>コンビニのラーメンを。<small>川辺のコンビニにはラーメン調理機があります。3月の夜は冷えるので、上着を一枚多めに。</small></blockquote></div>
+</div>
+
+<section class="wrap" id="food" data-sec="food">
+  <div class="sec-head"><h2>グルメ</h2><span class="ko">맛집</span><span class="n" data-n="food"></span><p>値段は1人あたりの目安（1,000ウォン≒100〜110円で換算）。3月はまだ寒いので、鍋やスープがよく合います。</p></div>
+  <div class="grid food" id="g-food"></div>
+</section>
+
+<section class="wrap" id="shop" data-sec="shop">
+  <div class="sec-head"><h2>買い物・お土産</h2><span class="ko">쇼핑</span><span class="n" data-n="shop"></span></div>
+  <div class="grid" id="g-shop"></div>
+</section>
+
+<section class="wrap" id="info" data-sec="info">
+  <div class="sec-head"><h2>実用情報</h2><span class="ko">여행 정보</span><span class="n" data-n="info"></span><p>空港からの移動、お金、通信、トラブル時の連絡先まで。</p></div>
+  <div class="grid info" id="g-info"></div>
+</section>
+
+<section class="wrap" id="phrase" data-sec="phrase">
+  <div class="sec-head"><h2>旅の韓国語</h2><span class="ko">한국어</span><span class="n" data-n="phrase"></span><p>赤字の読み方をそのまま言えば通じます。</p></div>
+  <div class="phr" id="g-phrase"></div>
+</section>
+
+<div id="fixed">
+<section class="wrap" id="plan">
+  <div class="sec-head"><h2>6日間のモデルプラン</h2><span class="ko">일정</span><p>移動が少なくなるように、1日1〜2エリアにまとめています。</p></div>
+  <div class="days">
+    <div class="day"><div class="n">DAY1<small>到着</small></div><div><h3>仁川空港 → 宿 → 明洞の夜</h3><ol><li>空港鉄道でソウル駅か弘大入口へ（約45〜60分）</li><li>宿に荷物を置いて、WOWPASSとT-moneyを準備</li><li>明洞の屋台で食べ歩き → サムギョプサル</li></ol></div><img src="img/myeongdong.jpg" alt="" loading="lazy"></div>
+    <div class="day"><div class="n">DAY2<small>王宮</small></div><div><h3>韓服で景福宮 → 北村 → 益善洞 → 仁寺洞</h3><ol><li>9時台に韓服を借りる（2時間ほど）</li><li>景福宮で撮影、10時か14時の守門将交代式</li><li>北村韓屋村 → 益善洞のカフェ → 仁寺洞で伝統雑貨</li><li>夜は清渓川を散歩</li></ol></div><img src="img/gyeong.jpg" alt="" loading="lazy"></div>
+    <div class="day"><div class="n">DAY3<small>トレンド</small></div><div><h3>聖水洞 → ソウルの森 → 東大門</h3><ol><li>聖水洞でカフェとポップアップ巡り</li><li>となりのソウルの森を散歩</li><li>夜は東大門でタッカンマリ → DDPのライトアップ</li></ol></div><img src="img/seongsu.jpg" alt="" loading="lazy"></div>
+    <div class="day"><div class="n">DAY4<small>西側</small></div><div><h3>望遠市場 → 延南洞 → 弘大 → 夜の漢江</h3><ol><li>望遠市場でつまみ食いランチ</li><li>京義線森の道を歩いて延南洞のカフェへ</li><li>弘大で古着と人生4カット</li><li>夜は汝矣島の漢江公園でラーメン</li></ol></div><img src="img/hongdae.jpg" alt="" loading="lazy"></div>
+    <div class="day"><div class="n">DAY5<small>市場と夜景</small></div><div><h3>広蔵市場 → 江南（COEX）→ 南山タワー</h3><ol><li>昼は広蔵市場でピンデトッとユッケ</li><li>COEXの星の広場図書館と奉恩寺</li><li>最後の夜はケーブルカーで南山タワーへ</li></ol></div><img src="img/tower.jpg" alt="" loading="lazy"></div>
+    <div class="day"><div class="n">DAY6<small>帰国</small></div><div><h3>お土産 → 仁川空港 → 新千歳</h3><ol><li>ソウル駅のロッテマートでお土産をまとめ買い</li><li>出発の3時間前には空港へ</li><li>帰りのキャリーの重さに注意</li></ol></div><img src="img/airport.jpg" alt="" loading="lazy"></div>
+  </div>
+</section>
+
+<section class="wrap" id="money">
+  <div class="sec-head"><h2>地図と予算</h2><span class="ko">지도 · 예산</span></div>
+  <div class="two">
+    <div class="panel map">
+      <h3>ざっくり位置関係</h3>
+      <svg viewBox="0 0 520 360" role="img" aria-label="漢江の北側に主な観光地、南側に汝矣島と江南がある">
+        <path class="river" d="M10 250 C90 240 140 275 205 268 C270 260 320 245 375 252 C430 260 480 235 515 228" fill="none" stroke-width="20"/>
+        <text x="455" y="275" class="r">漢江 ハンガン</text>
+        <g class="pin"><circle cx="235" cy="58" r="6"/><circle cx="320" cy="98" r="6"/><circle cx="235" cy="140" r="6"/><circle cx="258" cy="190" r="6"/><circle cx="410" cy="62" r="6"/><circle cx="420" cy="132" r="6"/><circle cx="450" cy="210" r="6"/><circle cx="105" cy="160" r="6"/></g>
+        <g class="pin2"><circle cx="180" cy="270" r="6"/><circle cx="360" cy="320" r="6"/><circle cx="460" cy="310" r="6"/></g>
+        <text x="246" y="56">景福宮</text><text x="246" y="70" class="r">キョンボックン</text>
+        <text x="331" y="96">益善洞</text><text x="331" y="110" class="r">イクソンドン</text>
+        <text x="172" y="138">明洞</text><text x="160" y="152" class="r">ミョンドン</text>
+        <text x="269" y="188">南山タワー</text><text x="269" y="202" class="r">ナムサン</text>
+        <text x="421" y="60">広蔵市場</text><text x="421" y="74" class="r">クァンジャン</text>
+        <text x="431" y="130">東大門</text><text x="431" y="144" class="r">トンデムン</text>
+        <text x="380" y="198">聖水洞</text><text x="380" y="212" class="r">ソンスドン</text>
+        <text x="60" y="130">弘大</text><text x="48" y="144" class="r">ホンデ</text>
+        <text x="150" y="300">汝矣島</text><text x="150" y="314" class="r">ヨイド</text>
+        <text x="372" y="324">江南</text><text x="372" y="338" class="r">カンナム</text>
+        <text x="440" y="340">COEX</text>
+        <text x="10" y="200" class="r">← 仁川空港（約1時間）</text>
+      </svg>
+    </div>
+    <div class="panel">
+      <h3>2人分の予算（3月想定）</h3>
+      <div class="total">約25〜30万円<small>1人 12.5〜15万円</small></div>
+      <div class="bars">
+        <div class="bar"><span>航空券＋荷物</span><span class="t"><i style="width:100%"></i></span><span class="v">9〜11万</span></div>
+        <div class="bar"><span>宿 5泊</span><span class="t"><i style="width:55%"></i></span><span class="v">4.5〜6万</span></div>
+        <div class="bar"><span>食費</span><span class="t"><i style="width:55%"></i></span><span class="v">4.5〜6万</span></div>
+        <div class="bar"><span>観光・買い物</span><span class="t"><i style="width:50%"></i></span><span class="v">4〜6万</span></div>
+        <div class="bar"><span>現地交通</span><span class="t"><i style="width:14%"></i></span><span class="v">1.5万</span></div>
+        <div class="bar"><span>通信・保険</span><span class="t"><i style="width:9%"></i></span><span class="v">1万</span></div>
+      </div>
+      <p class="note">新千歳→仁川の往復は3月で1人約4.2〜5.5万円（税・燃油込み、2026年11月の検索）。LCCは預け荷物が別料金のことが多いので、キャリー2個分を足した総額で比べます。</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="list">
+  <div class="sec-head"><h2>持ち物チェック</h2><span class="ko">준비물</span><p>チェックはこのブラウザにだけ保存されます。</p></div>
+  <div class="check" id="checklist"></div>
+</section>
+</div>
+</main>
+
+<footer class="wrap">
+  <h4>写真クレジット（Wikimedia Commons）</h4>
+  <span id="credits"></span><br>
+  料金・営業時間・為替は2026年11月時点の目安です。出発前に公式サイトやNAVER Mapで最新情報を確認してください。
+</footer>
+
+<script>
+const S=[
+{id:'gyeong',cat:'spot',img:'gyeong',name:'景福宮',yomi:'キョンボックン',ko:'경복궁',area:'鍾路',star:'必見',
+ desc:'朝鮮王朝の正宮で、ソウルで一番大きい王宮。正面の光化門から勤政殿まで、写真映えする建物が続きます。',
+ f:{'最寄り駅':'3号線 景福宮駅 5番出口','所要':'2〜3時間','料金':'3,000ウォン（韓服着用で無料）','時間':'9:00〜18:00ごろ・火曜休み'},
+ tip:'守門将の交代式は10時と14時（光化門前）。韓服を着るなら午前中が空いていて撮りやすいです。',tags:['王宮','韓服','カップル','写真','昼']},
+{id:'changdeok',cat:'spot',img:'changdeok',name:'昌徳宮',yomi:'チャンドックン',ko:'창덕궁',area:'鍾路',
+ desc:'世界遺産の王宮。景福宮より人が少なく、落ち着いて回れます。奥の後苑（秘苑）は予約制のガイドツアー。',
+ f:{'最寄り駅':'3号線 安国駅 3番出口','所要':'1.5〜2時間','料金':'3,000ウォン（後苑は別料金）','時間':'9:00〜18:00ごろ・月曜休み'},
+ tip:'景福宮と北村の間にあるので、DAY2に組み込みやすいです。',tags:['王宮','世界遺産','静か','昼']},
+{id:'hanbok',cat:'spot',img:'hanbok',name:'韓服レンタル',yomi:'ハンボク',ko:'한복',area:'鍾路',star:'カップル',
+ desc:'景福宮の周りにレンタル店がたくさん。髪のセットや小物もつけられます。ペアで色を合わせるのがおすすめ。',
+ f:{'場所':'景福宮駅・安国駅の周辺','所要':'2〜4時間借りる','料金':'1人 2万〜3万ウォン（ヘアセット別）','予約':'Klook・KKdayやお店のサイト'},
+ tip:'3月は寒いので、下に薄手のインナーを着ていくと安心。韓服を着ていると景福宮・昌徳宮などの王宮が無料です。',tags:['体験','写真','カップル','無料']},
+{id:'bukchon',cat:'spot',img:'bukchon',name:'北村韓屋村',yomi:'プクチョンハノンマウル',ko:'북촌한옥마을',area:'鍾路',
+ desc:'伝統家屋の韓屋が並ぶ坂道の住宅街。坂の上から見下ろす屋根並みが有名な撮影ポイントです。',
+ f:{'最寄り駅':'3号線 安国駅 2番出口','所要':'1時間','料金':'無料','時間':'観光は10:00〜17:00（それ以外は一部立入制限）'},
+ tip:'実際に人が住んでいるので、大声と玄関先での撮影は控えて。坂道が多いので歩きやすい靴で。',tags:['街歩き','写真','無料','韓屋']},
+{id:'ikseon',cat:'spot',img:'ikseon',name:'益善洞',yomi:'イクソンドン',ko:'익선동',area:'鍾路',star:'カフェ',
+ desc:'韓屋をリノベーションしたカフェ、レストラン、雑貨店が細い路地にぎっしり。夜はライトがついて雰囲気が変わります。',
+ f:{'最寄り駅':'1・3・5号線 鍾路3街駅 4番出口','所要':'1〜2時間','料金':'無料（カフェ1杯 約6,000〜8,000ウォン）','時間':'お店はだいたい11:00〜22:00'},
+ tip:'週末の昼は混むので、平日か夕方が狙い目。',tags:['カフェ','韓屋','夜','カップル','写真']},
+{id:'insadong',cat:'spot',img:'insadong',name:'仁寺洞',yomi:'インサドン',ko:'인사동',area:'鍾路',
+ desc:'伝統工芸品、茶房、ギャラリーが並ぶ通り。中庭がらせん状になった「サムジキル」で雑貨探しを。',
+ f:{'最寄り駅':'3号線 安国駅 6番出口','所要':'1時間','料金':'無料','時間':'お店は10:00〜20:00ごろ'},
+ tip:'伝統茶の茶房でひと休み。お土産の箸やポジャギ（布）もここで。',tags:['お土産','伝統','街歩き','雨の日']},
+{id:'cheonggye',cat:'spot',img:'cheonggye',name:'清渓川',yomi:'チョンゲチョン',ko:'청계천',area:'鍾路・中区',
+ desc:'ビル街の真ん中を流れる約11kmの小川。川沿いに降りて歩けて、夜はライトアップされます。',
+ f:{'最寄り駅':'5号線 光化門駅 5番出口','所要':'30分〜','料金':'無料','時間':'いつでも'},
+ tip:'光化門から東大門方面へ歩くと、そのまま広蔵市場に着きます。',tags:['夜','散歩','無料','カップル']},
+{id:'myeongdong',cat:'spot',img:'myeongdong',name:'明洞',yomi:'ミョンドン',ko:'명동',area:'中区',
+ desc:'コスメ店と屋台が集まる繁華街。夕方からメイン通りに屋台が並びます。両替所もここが一番多いです。',
+ f:{'最寄り駅':'4号線 明洞駅 6番出口','所要':'2時間','料金':'屋台1品 3,000〜6,000ウォン','時間':'屋台は16:00ごろ〜22:00'},
+ tip:'両替は明洞の両替所がレートがいいことが多いです。南山タワーのケーブルカー乗り場まで歩けます。',tags:['買い物','屋台','夜','両替','コスメ']},
+{id:'tower',cat:'spot',img:'tower',name:'Nソウルタワー（南山）',yomi:'ナムサン',ko:'N서울타워',area:'南山',star:'夜景',
+ desc:'南山の山頂に立つタワー。展望台からソウルを一望でき、フェンスには恋人たちの南京錠がずらり。',
+ f:{'行き方':'明洞駅から歩いて南山ケーブルカーへ','所要':'2時間','料金':'ケーブルカー往復 約1.5万ウォン／展望台 2万ウォン台','時間':'展望台は22:00〜23:00ごろまで'},
+ tip:'南京錠はタワーの売店でも買えます。夕方に上がって、日没から夜景まで見るのがおすすめ。',tags:['夜景','カップル','展望台','夜']},
+{id:'gwangjang',cat:'spot',img:'gwangjang',name:'広蔵市場',yomi:'クァンジャンシジャン',ko:'광장시장',area:'鍾路',star:'食べ歩き',
+ desc:'100年以上続く市場。屋台でピンデトッ（緑豆のチヂミ）、ユッケ、麻薬キンパを食べ歩けます。',
+ f:{'最寄り駅':'1号線 鍾路5街駅 8番出口','所要':'1〜1.5時間','料金':'1品 4,000〜1万5,000ウォン','時間':'屋台は10:00〜22:00ごろ・日曜休みの店あり'},
+ tip:'屋台は現金のみの店も。座ると1品は注文するのがマナーです。',tags:['市場','食べ歩き','昼','現金']},
+{id:'ddp',cat:'spot',img:'ddp',name:'東大門デザインプラザ（DDP）',yomi:'トンデムン',ko:'동대문디자인플라자',area:'中区',
+ desc:'曲線だけでできた近未来的な建物。展示やポップアップが開かれ、夜はライトアップ。周りは深夜まで開くファッションビル街。',
+ f:{'最寄り駅':'2・4・5号線 東大門歴史文化公園駅 1番出口','所要':'1〜2時間','料金':'外観は無料（展示は有料）','時間':'建物は10:00〜20:00ごろ'},
+ tip:'タッカンマリ通りまで歩いて10分ほど。夕食とセットで。',tags:['建築','夜','写真','買い物']},
+{id:'ihwa',cat:'spot',img:'ihwa',name:'梨花洞壁画村・駱山公園',yomi:'イファドン・ナクサン',ko:'이화동 벽화마을',area:'鍾路',
+ desc:'坂道に壁画が残る住宅街と、ソウルの城壁が続く公園。城壁沿いの夕景がきれいです。',
+ f:{'最寄り駅':'4号線 恵化駅 2番出口','所要':'1〜1.5時間','料金':'無料','時間':'昼間がおすすめ'},
+ tip:'住宅街なので静かに。恵化（大学路）は小劇場とカフェの街でもあります。',tags:['街歩き','夕景','無料','写真']},
+{id:'seongsu',cat:'spot',img:'seongsu',name:'聖水洞',yomi:'ソンスドン',ko:'성수동',area:'城東',star:'トレンド',
+ desc:'倉庫や工場を改装したカフェ、ブランドのポップアップストアが集まる「ソウルのブルックリン」。今いちばん流行っているエリア。',
+ f:{'最寄り駅':'2号線 聖水駅 3・4番出口','所要':'半日','料金':'無料（カフェ1杯 約7,000ウォン〜）','時間':'お店は11:00〜21:00ごろ'},
+ tip:'ポップアップは期間限定なので、出発前にInstagramで「성수 팝업」と検索してチェック。',tags:['カフェ','ポップアップ','買い物','カップル']},
+{id:'seoulforest',cat:'spot',img:'seoulforest',name:'ソウルの森',yomi:'ソウルスッ',ko:'서울숲',area:'城東',
+ desc:'聖水洞のとなりにある大きな公園。シカのいるエリアや並木道があり、カフェ巡りの合間の散歩に。',
+ f:{'最寄り駅':'水仁・盆唐線 ソウルの森駅 3番出口','所要':'1時間','料金':'無料','時間':'いつでも'},
+ tip:'公園の周りもおしゃれなカフェが多いエリアです。',tags:['公園','散歩','無料']},
+{id:'hongdae',cat:'spot',img:'hongdae',name:'弘大',yomi:'ホンデ',ko:'홍대',area:'麻浦',
+ desc:'美大のある若者の街。路上ライブ、古着、雑貨、プリクラの「人生4カット」。夜遅くまで賑やかです。',
+ f:{'最寄り駅':'2号線・空港鉄道 弘大入口駅 9番出口','所要':'半日','料金':'無料','時間':'お店は12:00〜23:00ごろ'},
+ tip:'空港鉄道が止まるので宿をとるのにも便利。路上ライブは週末の夕方から。',tags:['若者','買い物','夜','プリクラ','宿']},
+{id:'gyeongui',cat:'spot',img:'gyeongui',name:'延南洞・京義線森の道',yomi:'ヨンナムドン',ko:'연남동',area:'麻浦',
+ desc:'線路跡を公園にした細長い散歩道。両側に小さなカフェやベーカリーが並び、弘大から歩いてつながっています。',
+ f:{'最寄り駅':'弘大入口駅 3番出口','所要':'1〜2時間','料金':'無料','時間':'いつでも'},
+ tip:'天気がいい日はテイクアウトして芝生でひと休み。',tags:['カフェ','散歩','無料','カップル']},
+{id:'mangwon',cat:'spot',img:'mangwon',name:'望遠市場',yomi:'マンウォンシジャン',ko:'망원시장',area:'麻浦',
+ desc:'地元の人が通う市場。コロッケ、トッポッキ、チキンなどが安く、観光客向けの市場より落ち着いています。',
+ f:{'最寄り駅':'6号線 望遠駅 2番出口','所要':'1時間','料金':'1品 2,000〜5,000ウォン','時間':'10:00〜20:00ごろ'},
+ tip:'弘大から1駅。歩いて漢江（望遠漢江公園）にも出られます。',tags:['市場','食べ歩き','ローカル','安い']},
+{id:'hangang',cat:'spot',img:'hangang',name:'汝矣島漢江公園',yomi:'ヨイドハンガン',ko:'여의도한강공원',area:'永登浦',star:'カップル',
+ desc:'漢江沿いで一番人気の公園。コンビニのラーメン調理機で作る「漢江ラーメン」と、デリバリーのチキンが定番です。',
+ f:{'最寄り駅':'5号線 汝矣ナル駅 2・3番出口','所要':'1〜2時間','料金':'無料','時間':'いつでも'},
+ tip:'4月上旬は輪中路（ユンジュンノ）の桜祭り。3月の夜は冷えるのでレジャーシートと上着を。',tags:['夜景','川','カップル','無料','桜']},
+{id:'cherry',cat:'spot',img:'cherry',name:'汝矣島の桜（輪中路）',yomi:'ユンジュンノ',ko:'윤중로 벚꽃',area:'永登浦',
+ desc:'国会議事堂の裏に約1.7kmの桜並木。例年4月上旬に満開になり、桜祭りが開かれます。',
+ f:{'最寄り駅':'9号線 国会議事堂駅','見頃':'例年4月上旬','料金':'無料','時間':'夜桜もあり'},
+ tip:'3月中の旅行だと桜には少し早いです。3月末〜4月頭なら咲き始めに当たるかも。',tags:['桜','春','無料','夜']},
+{id:'banpo',cat:'spot',img:'banpo',name:'盤浦大橋 月光虹噴水',yomi:'パンポデギョ',ko:'반포대교 달빛무지개분수',area:'瑞草',
+ desc:'橋の両側から虹色にライトアップされた噴水が出る名物ショー。',
+ f:{'最寄り駅':'3・7・9号線 高速ターミナル駅','運行':'例年4〜10月（3月は運休の年が多い）','料金':'無料','時間':'夜に1日数回'},
+ tip:'3月の旅行では見られない可能性が高いです。春休みが4月にかかるなら候補に。',tags:['夜景','噴水','無料','春']},
+{id:'library',cat:'spot',img:'library',name:'星の広場図書館（COEX）',yomi:'ピョルマダン',ko:'별마당도서관',area:'江南',
+ desc:'巨大ショッピングモールCOEXの中にある、高さ13mの本棚が並ぶ図書館。誰でも無料で入れます。',
+ f:{'最寄り駅':'2号線 三成駅 5・6番出口／9号線 奉恩寺駅','所要':'1時間（COEXも見るなら半日）','料金':'無料','時間':'10:30〜22:00'},
+ tip:'屋内なので雨や寒い日に。COEXには水族館や大きなフードコートもあります。',tags:['雨の日','無料','写真','買い物']},
+{id:'bongeun',cat:'spot',img:'bongeun',name:'奉恩寺',yomi:'ポンウンサ',ko:'봉은사',area:'江南',
+ desc:'高層ビル街のすぐ横にある1,200年以上の歴史をもつお寺。大きな弥勒大仏が立っています。',
+ f:{'最寄り駅':'9号線 奉恩寺駅 1番出口','所要':'40分','料金':'無料','時間':'日中'},
+ tip:'COEXの向かいなので、星の広場図書館とセットで。',tags:['寺','無料','静か']},
+{id:'lottetower',cat:'spot',img:'lottetower',name:'ロッテワールドタワー（ソウルスカイ）',yomi:'ロッテウォルドゥタウォ',ko:'롯데월드타워',area:'松坡',
+ desc:'高さ555mの韓国一高いビル。117〜123階の展望台「ソウルスカイ」はガラス床のスリルも。',
+ f:{'最寄り駅':'2・8号線 蚕室駅 1・2番出口','所要':'1.5〜2時間','料金':'展望台 3万ウォン前後','時間':'10:30〜22:00ごろ'},
+ tip:'下のロッテワールドモールで買い物と食事も。夕暮れの時間帯が人気。',tags:['夜景','展望台','カップル','雨の日']},
+{id:'lotteworld',cat:'spot',img:'lotteworld',name:'ロッテワールド',yomi:'ロッテウォルドゥ',ko:'롯데월드',area:'松坡',
+ desc:'屋内と屋外がつながったテーマパーク。制服を着て回る学生も多く、韓国らしい雰囲気です。',
+ f:{'最寄り駅':'2・8号線 蚕室駅 4番出口','所要':'半日〜1日','料金':'1日券 6万ウォン前後（ネット予約で割引あり）','時間':'10:00〜21:00ごろ'},
+ tip:'屋内エリアが大きいので雨の日でも遊べます。',tags:['テーマパーク','雨の日','カップル']},
+{id:'garosu',cat:'spot',img:'garosu',name:'カロスキル（新沙洞）',yomi:'カロスッキル',ko:'가로수길',area:'江南',
+ desc:'イチョウ並木の通りにセレクトショップやカフェが並ぶ、江南のおしゃれ通り。',
+ f:{'最寄り駅':'3号線 新沙駅 8番出口','所要':'1.5時間','料金':'無料','時間':'お店は11:00〜21:00ごろ'},
+ tip:'近くの狎鴎亭ロデオまで足をのばすと、もっと高級なエリアに。',tags:['買い物','カフェ','街歩き']},
+{id:'itaewon',cat:'spot',img:'itaewon',name:'梨泰院・漢南洞',yomi:'イテウォン・ハンナムドン',ko:'이태원',area:'龍山',
+ desc:'各国料理のレストランが集まる国際色豊かな街。となりの漢南洞はおしゃれなショップとカフェのエリア。',
+ f:{'最寄り駅':'6号線 梨泰院駅／漢江鎮駅','所要':'2時間','料金':'無料','時間':'お店は昼〜深夜'},
+ tip:'夜のバーも多いエリア。坂が多いので歩きやすい靴で。',tags:['夜','レストラン','買い物']},
+{id:'noryang',cat:'spot',img:'noryang',name:'鷺梁津水産市場',yomi:'ノリャンジン',ko:'노량진수산시장',area:'銅雀',
+ desc:'ソウル最大の魚市場。1階で魚介を選んで買い、上の階の食堂で刺身や鍋にしてもらえます。',
+ f:{'最寄り駅':'1・9号線 鷺梁津駅','所要':'1.5時間','料金':'2人で5万〜10万ウォン（調理代は別）','時間':'朝〜夜（店による）'},
+ tip:'値段は交渉制。2人前の量を伝えて、先に総額を確認すると安心。',tags:['市場','海鮮','ローカル']},
+];
+const F=[
+{id:'samgyeop',img:'samgyeop',name:'サムギョプサル',ko:'삼겹살',price:'1人 1.5万〜2万ウォン',desc:'厚切り豚バラを鉄板で焼き、サンチュにキムチやニンニクと包んで。2人前からの注文が基本。',tags:['焼肉','夜','定番']},
+{id:'dak',img:'dak',name:'タッカンマリ',ko:'닭한마리',price:'1羽 2.5万〜3万ウォン（2人で）',desc:'鶏1羽をまるごと煮込んだ鍋。〆はカルグクス（麺）を入れて。東大門のタッカンマリ通りが有名。',tags:['鍋','東大門','温まる']},
+{id:'pindae',img:'gwangjang',name:'ピンデトッ',ko:'빈대떡',price:'1枚 5,000〜7,000ウォン',desc:'緑豆をすりつぶして焼いたチヂミ。外はカリッと中はふんわり。広蔵市場の名物。',tags:['市場','食べ歩き']},
+{id:'tteok',img:'tteok',name:'トッポッキ',ko:'떡볶이',price:'1皿 4,000〜5,000ウォン',desc:'甘辛いコチュジャンソースで煮た餅。屋台ではおでん（オムク）と一緒に。',tags:['屋台','辛い','軽食']},
+{id:'chicken',img:'chicken',name:'チキン（チメク）',ko:'치킨',price:'1羽 2万〜2.5万ウォン',desc:'甘辛いヤンニョムチキンとビールの組み合わせ。デリバリーで宿や漢江公園で食べるのも定番。',tags:['夜食','漢江','ビール']},
+{id:'bibim',img:'bibim',name:'ビビンバ',ko:'비빔밥',price:'1万〜1.3万ウォン',desc:'ナムルと肉をご飯にのせて混ぜる。熱々の石焼き（トルソッ）は寒い日にぴったり。',tags:['ご飯','昼']},
+{id:'naeng',img:'naeng',name:'冷麺',ko:'냉면',price:'1.2万〜1.6万ウォン',desc:'冷たいスープの水冷麺と、辛いタレのビビン冷麺。焼肉の〆にも。',tags:['麺','焼肉の〆']},
+{id:'kalguk',img:'kalguk',name:'カルグクス',ko:'칼국수',price:'9,000〜1.1万ウォン',desc:'包丁で切った手打ち麺のスープ麺。明洞餃子のカルグクスは行列の定番。',tags:['麺','明洞','温まる']},
+{id:'samgye',img:'samgye',name:'サムゲタン',ko:'삼계탕',price:'1.8万〜2万ウォン',desc:'若鶏にもち米や高麗人参を詰めて煮込んだスープ。旅の疲れに。景福宮近くの名店が有名。',tags:['スープ','温まる','景福宮']},
+{id:'sundubu',img:'sundubu',name:'スンドゥブチゲ',ko:'순두부찌개',price:'9,000〜1.1万ウォン',desc:'やわらかい豆腐のピリ辛鍋。生卵を落として。朝から開いている店もあります。',tags:['鍋','辛い','朝ごはん']},
+{id:'gukbap',img:'gukbap',name:'クッパ・ソルロンタン',ko:'국밥',price:'1万〜1.3万ウォン',desc:'牛骨スープにご飯を入れた料理。やさしい味で、朝ごはんや二日酔いの日に。',tags:['朝ごはん','スープ','温まる']},
+{id:'jajang',img:'jajang',name:'チャジャンミョン',ko:'짜장면',price:'7,000〜9,000ウォン',desc:'黒い甘めの味噌ダレの麺。韓国式中華の定番で、出前でもよく頼まれます。',tags:['麺','安い']},
+{id:'gimbap',img:'gimbap',name:'キンパ',ko:'김밥',price:'1本 3,000〜5,000ウォン',desc:'ごま油香る韓国の海苔巻き。広蔵市場の小さな「麻薬キンパ」は止まらない味。',tags:['軽食','朝ごはん','市場']},
+{id:'hotteok',img:'hotteok',name:'ホットク',ko:'호떡',price:'1個 2,000〜3,000ウォン',desc:'黒糖とナッツを包んで焼いたおやき。寒い3月の屋台で食べたい。',tags:['屋台','甘い','おやつ']},
+{id:'bingsu',img:'bingsu',name:'ピンス（かき氷）',ko:'빙수',price:'1.2万〜2万ウォン（2人で1つ）',desc:'ミルク氷にきな粉餅やマンゴーをのせた韓国かき氷。カフェで一年中食べられます。',tags:['カフェ','甘い','カップル']},
+{id:'yukhoe',img:null,ko:'육회',name:'ユッケ',price:'1.5万〜2万ウォン',desc:'甘めのタレで和えた牛の生肉に卵黄をのせて。広蔵市場のユッケ横丁が有名。',tags:['市場','広蔵市場']},
+{id:'gejang',img:null,ko:'간장게장',name:'カンジャンケジャン',price:'1人 3万〜4万ウォン',desc:'生のワタリガニを醤油ダレに漬けた料理。「ご飯泥棒」と呼ばれるほどご飯が進む。',tags:['海鮮','ごちそう']},
+{id:'galbi',img:null,ko:'돼지갈비',name:'テジカルビ',price:'1人 1.6万〜2万ウォン',desc:'甘いタレに漬けた豚カルビの焼肉。サムギョプサルとどちらにするか迷ったら、2日に分けて。',tags:['焼肉','夜']},
+];
+const H=[
+{id:'oliveyoung',img:'oliveyoung',name:'オリーブヤング',ko:'올리브영',area:'明洞・弘大ほか',desc:'韓国最大のコスメ・ドラッグストア。パックやリップは配る用のお土産にも。',f:{'場所':'明洞だけで数店舗、どこの繁華街にもあり','支払い':'クレカ・WOWPASS可','免税':'1回1.5万ウォン以上で即時還付'},tip:'パスポートを持っていくと、その場で免税（消費税分を引いた額）になります。',tags:['コスメ','お土産','免税']},
+{id:'namdaemun',img:'namdaemun',name:'南大門市場',ko:'남대문시장',area:'中区',desc:'衣類、雑貨、海苔、乾物まで何でもある巨大市場。お土産をまとめて安く買えます。',f:{'最寄り駅':'4号線 会賢駅 5番出口','時間':'朝〜17:00ごろ・日曜休みの店多い','支払い':'現金のほうが値引きしてもらいやすい'},tip:'明洞から歩いて10分。カルチ（太刀魚）煮込み横丁も。',tags:['市場','お土産','安い','現金']},
+{id:'dongdaemunshop',img:'ddp',name:'東大門ファッションビル',ko:'동대문 쇼핑',area:'中区',desc:'深夜まで開いているファッションビル街。卸売りビルは夜から朝までの営業も。',f:{'最寄り駅':'東大門歴史文化公園駅','時間':'ビルによって10:30〜翌朝','支払い':'現金のみの店あり'},tip:'小売りのビル（ドゥータ、ミリオレなど）なら1着から買えます。',tags:['服','深夜','買い物']},
+{id:'lottemart',img:null,ko:'롯데마트',name:'ロッテマート ソウル駅店',area:'中区',desc:'観光客向けのスーパー。お菓子、海苔、ラーメン、調味料をまとめ買いするならここ。',f:{'最寄り駅':'ソウル駅（1号線・4号線・空港鉄道）直結','時間':'10:00〜24:00ごろ（月2回休み）','支払い':'クレカ可・免税カウンターあり'},tip:'帰国日に寄ってそのまま空港鉄道に乗れます。段ボールとテープもレジ横に。',tags:['お土産','スーパー','空港','免税']},
+{id:'daiso',img:null,ko:'다이소',name:'ダイソー（韓国）',area:'明洞ほか',desc:'日本と別ラインナップの韓国ダイソー。コスメや雑貨が安く、明洞駅前に大型店。',f:{'場所':'明洞駅 1番出口近く（12階建て）','料金':'1,000〜5,000ウォン中心'},tip:'韓国ダイソー限定のスキンケアが人気です。',tags:['コスメ','安い','雑貨']},
+{id:'souvenir',img:null,ko:'기념품',name:'定番のお土産リスト',area:'どこでも',desc:'韓国海苔、柚子茶、ハニーバターアーモンド、辛ラーメンなどの袋麺、シートマスク、韓国コスメ、伝統柄の雑貨（仁寺洞）。',f:{'安く買う':'南大門市場、ロッテマート','配る用':'シートマスク、小分けの海苔','重さ':'柚子茶の瓶とラーメン箱は重いので注意'},tip:'液体（コスメ・柚子茶）は預け荷物に。機内持ち込みは100ml以下まで。',tags:['お土産','荷物','重さ']},
+{id:'taxfree',img:null,ko:'택스리펀드',name:'免税（タックスリファンド）',area:'仕組み',desc:'「TAX FREE」表示の店で1回1.5万ウォン以上買うと、消費税分が戻ります。パスポートが必要。',f:{'即時還付':'店頭でその場で差し引き（上限あり）','空港還付':'仁川空港の機械でレシートを読み込む'},tip:'空港で還付する分は、出国審査の前に手続き。時間に余裕をもって。',tags:['免税','お金','空港','パスポート']},
+];
+const I=[
+{id:'airport',img:'airport',name:'仁川空港から市内へ',ko:'공항철도',tags:['空港','移動','電車','バス'],li:['空港鉄道（AREX）一般列車：ソウル駅まで約60分・約4,500ウォン。弘大入口にも止まる','空港鉄道 直通列車：ソウル駅まで約45分・約1.1万ウォン、全席指定でキャリーも置ける','空港リムジンバス：明洞・東大門などホテル近くまで約60〜80分・約1.7万ウォン','タクシー：市内まで約1時間・7万〜9万ウォン（深夜は割増）'],tip:'キャリー2個なら、宿が弘大かソウル駅近くだと乗り換えなしで楽です。'},
+{id:'subway',img:'metro',name:'地下鉄の乗り方',ko:'지하철',tags:['電車','移動','T-money'],li:['T-moneyかWOWPASSを改札にタッチ。出るときもタッチ','初乗り約1,500ウォン台（距離で加算）。乗り換えも追加料金ほぼなし','路線は番号と色で区別（2号線＝緑の環状線）','駅名の放送は韓国語・英語・中国語・日本語','終電は24:00〜24:30ごろ'],tip:'出口番号が大事。NAVER Mapで「◯番出口」まで確認してから出ましょう。'},
+{id:'tmoney',img:'arex',name:'T-money・WOWPASS',ko:'티머니',tags:['お金','交通カード','両替','WOWPASS'],li:['T-money：交通カード。コンビニで約4,000ウォンで買って現金チャージ','WOWPASS：両替機で円を入れるとチャージできるプリペイドカード。T-money機能つき','WOWPASSはクレカのように店で使え、残高はアプリで確認','空港・明洞・弘大などにWOWPASSの機械あり'],tip:'2人ともWOWPASSを1枚ずつ作れば、両替と交通費の管理がまとめてできます。'},
+{id:'money',img:null,ko:'돈',name:'お金・両替・支払い',tags:['お金','両替','クレカ','現金'],li:['目安：1,000ウォン ≒ 100〜110円（出発前に確認）','クレカ（Visa・Master）はほとんどの店で使える','屋台・市場・一部の食堂は現金のみ。1人2万〜3万円分のウォンがあると安心','両替は空港より明洞の両替所のほうがレートがいいことが多い','チップは不要'],tip:'クレカ払いで「円で払うか」聞かれたら、ウォン払いを選ぶほうが手数料が安く済みます。'},
+{id:'net',img:null,ko:'인터넷',name:'通信（eSIM・Wi-Fi）',tags:['スマホ','eSIM','Wi-Fi','通信'],li:['eSIM：出発前にアプリで買って設定。5日間無制限で1,000〜2,000円程度','ポケットWi-Fi：2人で1台をシェアできる。空港で受け取り','カフェや地下鉄の無料Wi-Fiもあるが、地図用にデータ通信は必須'],tip:'2人で別行動もあるなら、eSIMをそれぞれ入れるのが楽です。'},
+{id:'entry',img:null,ko:'입국',name:'入国・パスポート',tags:['入国','パスポート','K-ETA','空港'],li:['パスポートの残存期間は帰国日まで有効ならOK（余裕を持って）','日本人のK-ETA（電子渡航認証）は一時免除中。2027年春も続くか予約前に確認','入国カードは事前にオンライン提出できる場合あり','時差はなし'],tip:'免除の延長は毎年発表されるので、出発1か月前にもう一度チェック。'},
+{id:'weather',img:null,ko:'날씨',name:'3月の天気と服装',tags:['天気','服装','3月','寒さ'],li:['平均気温：最高10℃前後・最低0℃前後','札幌の3月より暖かいが、夜と川沿いは冷える','コート、薄手のダウン、マフラーがあると安心','黄砂・PM2.5の日はマスクを'],tip:'屋内は暖房が強いので、脱ぎ着しやすい重ね着がおすすめ。'},
+{id:'plug',img:null,ko:'전압',name:'電源・コンセント',tags:['充電','コンセント','変換プラグ'],li:['電圧220V、プラグは丸い2本ピンのCタイプ・SEタイプ','日本のプラグはそのまま刺さらないので変換プラグが必要','スマホ・PCの充電器は多くが100〜240V対応（表示を確認）','ドライヤーやヘアアイロンは海外対応品を'],tip:'変換プラグは2〜3個あると、2人のスマホを同時に充電できます。'},
+{id:'apps',img:null,ko:'앱',name:'入れておくアプリ',tags:['アプリ','地図','タクシー','翻訳'],li:['NAVER Map：地図と乗り換え。Googleマップより正確','カカオT：タクシー配車。行き先を入力すれば話さずに済む','Papago：翻訳。メニューをカメラで訳せる','WOWPASS：残高確認','配達アプリ（Coupang Eatsなど）は外国人だと使いにくいことも'],tip:'NAVER Mapは日本語表示に切り替えられます。'},
+{id:'taxi',img:null,ko:'택시',name:'タクシー',tags:['タクシー','移動','夜'],li:['ソウルの一般タクシー初乗り約4,800ウォン','オレンジ・白・銀が一般、黒は模範タクシーで高め','深夜（22時〜翌4時）は割増','カカオTで呼ぶと行き先が伝わっていて安心'],tip:'2人なら近距離は地下鉄よりタクシーのほうが早くて安いこともあります。'},
+{id:'manner',img:null,ko:'매너',name:'マナー・注意',tags:['マナー','トイレ','水','治安'],li:['地下鉄の優先席（ピンク席）は空いていても座らない','水道水は飲まず、ミネラルウォーターを','トイレットペーパーは流してOKの所が増えたが、ゴミ箱がある所はそちらへ','治安はいいが、夜の繁華街ではスリと客引きに注意','路上での喫煙は禁止エリアが多い'],tip:'食堂のおかず（パンチャン）はおかわり無料が多いです。'},
+{id:'emergency',img:null,ko:'긴급',name:'困ったときの連絡先',tags:['緊急','病院','警察','電話'],li:['警察：112','救急・消防：119','観光通訳案内（1330）：日本語対応・24時間','在大韓民国日本国大使館：ソウル・鍾路区','海外旅行保険の連絡先はスマホにメモ'],tip:'パスポートをなくしたら、まず警察で紛失届、次に大使館へ。'},
+{id:'hotel',img:null,ko:'숙소',name:'宿をとるエリア',tags:['宿','ホテル','エリア'],li:['明洞：どこに行くにも真ん中。初めてならここ','ソウル駅周辺：空港鉄道で一本、帰国日が楽','弘大：空港鉄道で一本、夜も賑やか。カップルに人気','東大門：ホテルが多く少し安め'],tip:'キャリー2個なら、駅から近い（徒歩5分以内）ことを最優先に。'},
+];
+const P=[
+['こんにちは','안녕하세요','アンニョンハセヨ'],['ありがとうございます','감사합니다','カムサハムニダ'],['すみません（呼びかけ）','저기요','チョギヨ'],['これください','이거 주세요','イゴ チュセヨ'],['いくらですか？','얼마예요?','オルマエヨ？'],['おいしいです','맛있어요','マシッソヨ'],['辛くしないでください','안 맵게 해 주세요','アン メプケ ヘ ジュセヨ'],['2人です','두 명이에요','トゥ ミョンイエヨ'],['お会計お願いします','계산해 주세요','ケサネ ジュセヨ'],['カードで払えますか？','카드 돼요?','カドゥ テヨ？'],['トイレはどこですか？','화장실 어디예요?','ファジャンシル オディエヨ？'],['ここに行きたいです','여기 가 주세요','ヨギ カ ジュセヨ'],['写真を撮ってもらえますか？','사진 좀 찍어 주세요','サジン チョム チゴ ジュセヨ'],['大丈夫です','괜찮아요','ケンチャナヨ'],['持ち帰りで','포장해 주세요','ポジャンヘ ジュセヨ'],['水ください','물 주세요','ムル チュセヨ'],
+];
+const CHECK=['パスポート（残存期間を確認）','航空券・予約確認メール','海外旅行保険の連絡先','クレジットカード 2枚','日本円の現金（両替用）','eSIM またはポケットWi-Fi','変換プラグ（Cタイプ）2〜3個','モバイルバッテリー（機内持ち込み）','コート・マフラー','歩きやすい靴','常備薬・マスク','エコバッグ（スーパーの袋は有料）','折りたたみ傘','お土産用の空きスペース・圧縮袋','NAVER Map・カカオT・Papagoのインストール','WOWPASSアプリ'];
+const CREDIT={hero:'Takipoint123 (CC BY-SA 4.0)',gyeong:'Basile Morin (CC BY-SA 4.0)',bukchon:'Basile Morin (CC BY-SA 4.0)',changdeok:'Basile Morin (CC BY-SA 4.0)',hanbok:'Republic of Korea (CC BY-SA 2.0)',ikseon:'S h y numis (CC BY-SA 4.0)',insadong:'Epicgenius (CC BY-SA 4.0)',cheonggye:'kallerna (CC BY-SA 4.0)',myeongdong:'Sgroey (CC BY-SA 4.0)',tower:'Rtflakfizer (CC BY-SA 4.0)',gwangjang:'Dr. Thomas Liptak (CC BY-SA 4.0)',ddp:'Eugene Lim (CC BY 2.0)',ihwa:'Stephen Kelly (CC BY 4.0)',seongsu:'CartoonChess (CC BY-SA 4.0)',seoulforest:'Enigma7seven (CC BY-SA 3.0)',hongdae:'Sgroey (CC BY-SA 4.0)',gyeongui:'Korea Tourism Organization (KOGL Type 1)',mangwon:'Enamoradadecorea (CC0)',hangang:'kallerna (CC BY-SA 4.0)',cherry:'AnbyG (CC BY-SA 4.0)',banpo:'Wvdp (CC0)',library:'Sean Young (CC BY 4.0)',bongeun:'kallerna (CC BY-SA 4.0)',lottetower:'Ox1997cow (CC BY 3.0)',lotteworld:'kallerna (CC BY-SA 4.0)',garosu:'sellyourseoul (CC BY 2.0)',itaewon:'eugene_o (CC BY 2.0)',noryang:'Basile Morin (CC BY-SA 4.0)',samgyeop:'hellochris (CC BY 2.0)',dak:'Kuroiniisan (CC BY-SA 3.0)',tteok:'jetalone (CC BY 2.0)',chicken:'Startandstar (CC0)',bibim:'Chloe Lim (CC BY 2.0)',naeng:'Korea.net / KOCIS (CC BY-SA 2.0)',kalguk:'jslander (CC BY 2.0)',samgye:'sozoooo (CC BY 2.0)',sundubu:'titanium22 (CC BY-SA 2.0)',gukbap:'Arumdaum (CC0)',jajang:'Emanuele Oddo (CC BY-SA 4.0)',gimbap:'changupn (CC0)',hotteok:'yearofeats (CC BY 2.0)',bingsu:'国立国語院 (CC BY-SA 2.0 KR)',oliveyoung:'Pkccccj (CC BY-SA 4.0)',namdaemun:'Sgroey (CC BY-SA 4.0)',airport:'Arne Müseler (CC BY-SA 3.0 DE)',arex:'TurnOnTheNight (CC BY-SA 4.0)',metro:'R151trains (CC0)'};
+
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ph=(o,cls='')=>o.img?`<div class="ph"><img src="img/${o.img}.jpg" alt="${esc(o.name)}" loading="lazy">${o.area?`<span class="area">${esc(o.area)}</span>`:''}${o.star?`<span class="star">${esc(o.star)}</span>`:''}</div>`:`<div class="ph noimg"><span>${esc(o.ko||'')}</span>${o.area?`<span class="area">${esc(o.area)}</span>`:''}</div>`;
+const facts=f=>f?`<dl class="facts">${Object.entries(f).map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`:'';
+const tags=t=>`<div class="tags">${t.map(x=>`<span>${esc(x)}</span>`).join('')}</div>`;
+const name=o=>o.yomi?`<ruby>${esc(o.name)}<rt>${esc(o.yomi)}</rt></ruby>`:esc(o.name);
+function txt(o){return [o.name,o.yomi,o.ko,o.area,o.desc,o.tip,o.price,...(o.tags||[]),...Object.entries(o.f||{}).flat(),...(o.li||[])].join(' ')}
+const items=[];
+function add(cat,html,o){const g=document.getElementById('g-'+cat);const d=document.createElement('div');d.innerHTML=html;const el=d.firstElementChild;el.dataset.t=txt(o).toLowerCase();g.appendChild(el);items.push({el,cat});}
+S.forEach(o=>add('spot',`<article class="item" id="s-${o.id}">${ph(o)}<div class="bd"><h3>${name(o)}<span class="ko2">${esc(o.ko)}</span></h3><p>${esc(o.desc)}</p>${facts(o.f)}<p class="tip">${esc(o.tip)}</p>${tags(o.tags)}</div></article>`,o));
+F.forEach(o=>add('food',`<article class="item">${ph(o)}<div class="bd"><h3>${esc(o.name)}<span class="ko2">${esc(o.ko)}</span></h3><span class="price">${esc(o.price)}</span><p>${esc(o.desc)}</p>${tags(o.tags)}</div></article>`,o));
+H.forEach(o=>add('shop',`<article class="item">${ph(o)}<div class="bd"><h3>${esc(o.name)}<span class="ko2">${esc(o.ko)}</span></h3><p>${esc(o.desc)}</p>${facts(o.f)}<p class="tip">${esc(o.tip)}</p>${tags(o.tags)}</div></article>`,o));
+I.forEach(o=>add('info',`<article class="item">${ph(o)}<div class="bd"><h3>${esc(o.name)}<span class="ko2">${esc(o.ko)}</span></h3><ul>${o.li.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p class="tip">${esc(o.tip)}</p>${tags(o.tags)}</div></article>`,o));
+P.forEach(p=>{const o={name:p[0],ko:p[1],yomi:p[2],tags:['韓国語','フレーズ']};add('phrase',`<div class="ph-row"><span class="ja">${esc(p[0])}</span><span class="kr">${esc(p[1])}</span><span class="yo">${esc(p[2])}</span></div>`,o)});
+document.getElementById('credits').textContent=Object.entries(CREDIT).map(([k,v])=>v).filter((v,i,a)=>a.indexOf(v)===i).join(' / ');
+
+const ck=document.getElementById('checklist');let saved={};try{saved=JSON.parse(localStorage.getItem('seoul-check')||'{}')}catch(e){}
+CHECK.forEach((c,i)=>{const id='ck'+i;ck.insertAdjacentHTML('beforeend',`<label for="${id}"><input type="checkbox" id="${id}" ${saved[i]?'checked':''}>${esc(c)}</label>`)});
+ck.addEventListener('change',e=>{saved[e.target.id.slice(2)]=e.target.checked;try{localStorage.setItem('seoul-check',JSON.stringify(saved))}catch(err){}});
+
+const q=document.getElementById('q'),cnt=document.getElementById('count'),fixed=document.getElementById('fixed');let cat='all';
+const kata=s=>s.replace(/[ぁ-ゖ]/g,c=>String.fromCharCode(c.charCodeAt(0)+0x60));
+function run(){
+  const terms=q.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  let n=0;const per={};
+  items.forEach(({el,cat:c})=>{const t=el.dataset.t;const ok=(cat==='all'||cat===c)&&terms.every(w=>t.includes(w)||t.includes(kata(w)));el.hidden=!ok;if(ok){n++;per[c]=(per[c]||0)+1}});
+  document.querySelectorAll('[data-sec]').forEach(s=>{const c=s.dataset.sec;const k=per[c]||0;s.hidden=!k;const nn=s.querySelector('[data-n]');if(nn)nn.textContent=k+'件'});
+  const searching=terms.length||cat!=='all';fixed.hidden=searching;document.querySelector('.band').hidden=searching;
+  let em=document.getElementById('empty');if(!em){em=document.createElement('p');em.id='empty';em.className='empty wrap';document.querySelector('main').prepend(em)}
+  em.hidden=n>0;em.textContent=`「${q.value}」に当てはまる情報が見つかりませんでした。別の言葉か、カテゴリを「すべて」にして探してみてください。`;
+  cnt.textContent=searching?`${n}件ヒット`:`全${items.length}件`;
+}
+q.addEventListener('input',run);
+document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('click',()=>{cat=b.dataset.cat;document.querySelectorAll('.filters button').forEach(x=>x.setAttribute('aria-pressed',x===b));run();document.querySelector('.searchbar').scrollIntoView({block:'start'})}));
+document.querySelectorAll('.quick button').forEach(b=>b.addEventListener('click',()=>{q.value=b.textContent;run();document.querySelector('.searchbar').scrollIntoView({block:'start'})}));
+run();
+</script>
+</body>
+</html>
